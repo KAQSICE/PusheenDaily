@@ -8,13 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tranced.pusheendailykt.R
-import com.tranced.pusheendailykt.main.presenter.NewsListAdapter
-import com.tranced.pusheendailykt.main.presenter.OnLoadingListener
 import com.tranced.pusheendailykt.main.presenter.Presenter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * MainActivity
+ * @author TranceD
+ */
 class MainActivity : AppCompatActivity(), IView {
     private val presenter = Presenter()
     private lateinit var toolbar: Toolbar
@@ -33,18 +35,6 @@ class MainActivity : AppCompatActivity(), IView {
         initSwipeRefreshLayout()
     }
 
-    override fun getDay(): String {
-        return presenter.getDay()
-    }
-
-    override fun getMonth(): String {
-        return presenter.getMonth()
-    }
-
-    override fun getTitleText(): String {
-        return presenter.getTitleText()
-    }
-
     override fun initToolbar() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -52,15 +42,14 @@ class MainActivity : AppCompatActivity(), IView {
         toolbarDay = findViewById(R.id.toolbar_day)
         toolbarMonth = findViewById(R.id.toolbar_month)
         toolbarTitleText = findViewById(R.id.toolbar_title_text)
-        toolbarDay.setText(getDay())
-        toolbarMonth.setText(getMonth())
-        toolbarTitleText.setText(getTitleText())
+        toolbarDay.text = getDay()
+        toolbarMonth.text = getMonth()
+        toolbarTitleText.text = getTitleText()
     }
 
     override fun initNewsList() = runBlocking {
         val job1 = GlobalScope.launch {
-            getNewsItems()
-            getBannerItems()
+            getBothItems()
             while (true) {
                 if (!presenter.newsItems.isNullOrEmpty() && !presenter.topNewsItems.isNullOrEmpty()) {
                     break
@@ -68,7 +57,11 @@ class MainActivity : AppCompatActivity(), IView {
             }
         }
         job1.join()
-        newsListAdapter = NewsListAdapter(baseContext, presenter.newsItems, presenter.topNewsItems)
+        newsListAdapter = NewsListAdapter(
+            baseContext,
+            presenter.newsItems,
+            presenter.topNewsItems
+        )
         newsList = findViewById(R.id.news_list)
         newsList.layoutManager = LinearLayoutManager(applicationContext)
         newsList.adapter = newsListAdapter
@@ -93,10 +86,9 @@ class MainActivity : AppCompatActivity(), IView {
         swipeRefreshLayout = findViewById(R.id.refresh)
         swipeRefreshLayout.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() = runBlocking {
-                presenter.resetData()
+                resetData()
                 val job3 = GlobalScope.launch {
-                    presenter.getNewsItems()
-                    presenter.getBannerItems()
+                    getBothItems()
                     while (true) {
                         if (!presenter.newsItems.isNullOrEmpty() && !presenter.topNewsItems.isNullOrEmpty()) {
                             break
@@ -105,7 +97,12 @@ class MainActivity : AppCompatActivity(), IView {
                 }
                 job3.join()
 
-                newsListAdapter = NewsListAdapter(baseContext, presenter.newsItems, presenter.topNewsItems)
+                newsListAdapter =
+                    NewsListAdapter(
+                        baseContext,
+                        presenter.newsItems,
+                        presenter.topNewsItems
+                    )
                 newsList.adapter = newsListAdapter
                 swipeRefreshLayout.isRefreshing = false
 
@@ -117,7 +114,23 @@ class MainActivity : AppCompatActivity(), IView {
         presenter.getNewsItems()
     }
 
-    override fun getBannerItems() {
-        presenter.getBannerItems()
+    override fun getBothItems() {
+        presenter.getBothItems()
+    }
+
+    override fun resetData() {
+        presenter.resetData()
+    }
+
+    override fun getDay(): String {
+        return presenter.getDay()
+    }
+
+    override fun getMonth(): String {
+        return presenter.getMonth()
+    }
+
+    override fun getTitleText(): String {
+        return presenter.getTitleText()
     }
 }

@@ -1,11 +1,11 @@
 package com.tranced.pusheendailykt.splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.tranced.pusheendailykt.Constants.Companion.SPLASH_DELAY
 import com.tranced.pusheendailykt.Constants.Companion.SPLASH_DELAY_WHAT
@@ -17,7 +17,7 @@ import com.tranced.pusheendailykt.main.view.MainActivity
  * @author TranceD
  */
 class SplashActivity : AppCompatActivity() {
-    private lateinit var splashImage: ImageView;
+    private lateinit var splashImage: ImageView
     //TODO 使用协程完成
     private val handler: Handler = object: Handler() {
         override fun handleMessage(msg: Message) {

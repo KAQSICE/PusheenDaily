@@ -1,8 +1,12 @@
-package com.tranced.pusheendailykt.main.presenter
+package com.tranced.pusheendailykt.main.view
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * OnLoadingListener
+ * @author TranceD
+ */
 abstract class OnLoadingListener: RecyclerView.OnScrollListener() {
     private var isScrollingUp = false
 
@@ -13,8 +17,7 @@ abstract class OnLoadingListener: RecyclerView.OnScrollListener() {
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-        val linearLayoutManager: LinearLayoutManager
-                = recyclerView.layoutManager as LinearLayoutManager
+        val linearLayoutManager: LinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
         when (newState) {
             RecyclerView.SCROLL_STATE_IDLE -> {
                 val lastItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition()

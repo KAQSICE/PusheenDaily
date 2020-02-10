@@ -10,6 +10,10 @@ import androidx.appcompat.widget.Toolbar
 import com.tranced.pusheendailykt.R
 import java.io.Serializable
 
+/**
+ * DetailActivity
+ * @author TranceD
+ */
 class DetailActivity : AppCompatActivity(), Serializable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -34,6 +34,11 @@ interface IPresenter {
     fun getBannerItems()
 
     /**
+     * 获取轮播数据和新闻列表
+     */
+    fun getBothItems()
+
+    /**
      * 获取url部分日期
      * @param countDownDays 倒数天数
      * @return 返回url后的日期

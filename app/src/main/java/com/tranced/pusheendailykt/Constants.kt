@@ -1,5 +1,9 @@
 package com.tranced.pusheendailykt
 
+/**
+ * Constants
+ * @author TranceD
+ */
 class Constants {
     companion object {
         /**

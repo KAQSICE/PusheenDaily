@@ -1,5 +1,9 @@
 package com.tranced.pusheendailykt.main.view
 
+/**
+ * IView
+ * @author TranceD
+ */
 interface IView {
     /**
      * 获取标题栏天数
@@ -40,7 +44,12 @@ interface IView {
     fun getNewsItems()
 
     /**
-     * 获取轮播新闻列表
+     * 获取轮播数据和新闻列表
      */
-    fun getBannerItems()
+    fun getBothItems()
+
+    /**
+     * 重置数据
+     */
+    fun resetData()
 }

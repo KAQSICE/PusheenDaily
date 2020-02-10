@@ -1,4 +1,4 @@
-package com.tranced.pusheendailykt.main.presenter
+package com.tranced.pusheendailykt.main.view
 
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +9,10 @@ import com.bumptech.glide.Glide
 import com.tranced.pusheendailykt.R
 import com.tranced.pusheendailykt.main.model.TopNewsItemsBean
 
+/**
+ * BannerAdapter
+ * @author TranceD
+ */
 class BannerAdapter(topNewsItemsList: MutableList<TopNewsItemsBean.TopStoriesBean>) :
     PagerAdapter() {
     private val topNewsItemsList = topNewsItemsList
@@ -31,22 +35,22 @@ class BannerAdapter(topNewsItemsList: MutableList<TopNewsItemsBean.TopStoriesBea
                 Glide.with(view)
                     .load(topNewsItemsList[topNewsItemsList.size - 1].image)
                     .into(topNewsImage)
-                topNewsTitle.setText(topNewsItemsList[topNewsItemsList.size - 1].title)
-                topNewsHint.setText(topNewsItemsList[topNewsItemsList.size - 1].hint)
+                topNewsTitle.text = topNewsItemsList[topNewsItemsList.size - 1].title
+                topNewsHint.text = topNewsItemsList[topNewsItemsList.size - 1].hint
             }
             topNewsItemsList.size + 1 -> {
                 Glide.with(view)
                     .load(topNewsItemsList[0].image)
                     .into(topNewsImage)
-                topNewsTitle.setText(topNewsItemsList[0].title)
-                topNewsHint.setText(topNewsItemsList[0].hint)
+                topNewsTitle.text = topNewsItemsList[0].title
+                topNewsHint.text = topNewsItemsList[0].hint
             }
             else -> {
                 Glide.with(view)
                     .load(topNewsItemsList[position - 1].image)
                     .into(topNewsImage)
-                topNewsTitle.setText(topNewsItemsList[position - 1].title)
-                topNewsHint.setText(topNewsItemsList[position - 1].hint)
+                topNewsTitle.text = topNewsItemsList[position - 1].title
+                topNewsHint.text = topNewsItemsList[position - 1].hint
             }
         }
         container.addView(view)

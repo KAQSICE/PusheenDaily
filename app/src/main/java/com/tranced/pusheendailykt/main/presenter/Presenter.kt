@@ -10,6 +10,10 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Presenter
+ * @author TranceD
+ */
 class Presenter: IPresenter {
     private var countDownDays: Int = Constants.COUNT_DOWN_DAYS_INITIAL
     var newsItems: MutableList<NewsItemsBean.StoriesBean>? = null
@@ -102,6 +106,11 @@ class Presenter: IPresenter {
                 topNewsItems = topNewsItemsBean.top_stories?.toMutableList()
             }
         })
+    }
+
+    override fun getBothItems() {
+        getNewsItems()
+        getBannerItems()
     }
 
     override fun getDate(countDownDays: Int): String {

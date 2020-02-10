@@ -1,4 +1,4 @@
-package com.tranced.pusheendailykt.main.presenter
+package com.tranced.pusheendailykt.main.view
 
 import android.content.Context
 import android.content.Intent
@@ -21,6 +21,10 @@ import com.tranced.pusheendailykt.main.model.NewsItemsBean
 import com.tranced.pusheendailykt.main.model.TopNewsItemsBean
 import java.util.*
 
+/**
+ * NewsListAdapter
+ * @author TranceD
+ */
 class NewsListAdapter(
     mContext: Context,
     newsItemsList: MutableList<NewsItemsBean.StoriesBean>?,
@@ -39,22 +43,30 @@ class NewsListAdapter(
             Constants.BANNER_TYPE -> {
                 mView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.main_news_list_banner, parent, false)
-                return BannerViewHolder(mView)
+                return BannerViewHolder(
+                    mView
+                )
             }
             Constants.NEWS_ITEM_TYPE -> {
                 mView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.main_news_list_news_items, parent, false)
-                return NewsItemsViewHolder(mView)
+                return NewsItemsViewHolder(
+                    mView
+                )
             }
             Constants.DATELINE_TYPE -> {
                 mView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.main_news_list_dateline, parent, false)
-                return DatelineViewHolder(mView)
+                return DatelineViewHolder(
+                    mView
+                )
             }
             else -> {
                 mView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.main_news_list_loading, parent, false)
-                return LoadingViewHolder(mView)
+                return LoadingViewHolder(
+                    mView
+                )
             }
         }
     }
@@ -80,7 +92,10 @@ class NewsListAdapter(
         when (holder) {
             is BannerViewHolder -> {
                 val viewHolder: BannerViewHolder = holder
-                viewHolder.banner.adapter = BannerAdapter(topNewsItems)
+                viewHolder.banner.adapter =
+                    BannerAdapter(
+                        topNewsItems
+                    )
                 viewHolder.banner.currentItem = 1
                 setAutoPlay(viewHolder)
                 setBannerListeners(viewHolder)
@@ -88,8 +103,8 @@ class NewsListAdapter(
 
             is NewsItemsViewHolder -> {
                 val viewHolder: NewsItemsViewHolder = holder
-                viewHolder.newsTitle.setText(newsItems[position - 1].title)
-                viewHolder.newsHint.setText(newsItems[position - 1].hint)
+                viewHolder.newsTitle.text = newsItems[position - 1].title
+                viewHolder.newsHint.text = newsItems[position - 1].hint
                 Glide.with(mLayoutInflater.context)
                     .load(newsItems[position - 1].images!![0])
                     .into(viewHolder.newsImage)
@@ -109,7 +124,9 @@ class NewsListAdapter(
     }
 
     private fun setAutoPlay(viewHolder: BannerViewHolder) {
-        handler = MyHandler(viewHolder)
+        handler = MyHandler(
+            viewHolder
+        )
         mTimer.schedule(object : TimerTask() {
             override fun run() {
                 val message: Message = Message()
