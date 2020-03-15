@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/toolbar_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/toolbar_day"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#000"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/toolbar_month"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#000"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/a_line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="10dp"
+        android:layout_toEndOf="@+id/toolbar_date"
+        android:background="#444" />
+
+    <TextView
+        android:id="@+id/toolbar_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@id/a_line"
+        android:textColor="#000"
+        android:textSize="24sp" />
+
+</RelativeLayout>
