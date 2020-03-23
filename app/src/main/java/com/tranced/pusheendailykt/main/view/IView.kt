@@ -1,5 +1,7 @@
 package com.tranced.pusheendailykt.main.view
 
+import androidx.recyclerview.widget.RecyclerView
+
 /**
  * IView
  * @author TranceD
@@ -31,25 +33,10 @@ interface IView {
     /**
      * 初始化新闻列表
      */
-    fun initNewsList()
+    fun initNewsList(): RecyclerView
 
     /**
      * 下拉刷新
      */
     fun initSwipeRefreshLayout()
-
-    /**
-     * 获取新闻列表
-     */
-    fun getNewsItems()
-
-    /**
-     * 获取轮播数据和新闻列表
-     */
-    fun getBothItems()
-
-    /**
-     * 重置数据
-     */
-    fun resetData()
 }

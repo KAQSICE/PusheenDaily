@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.google.gson.Gson
 import com.tranced.pusheendailykt.Constants
+import com.tranced.pusheendailykt.commons.experimental.cache.RefreshState
 import com.tranced.pusheendailykt.main.model.NewsItemsBean
 import com.tranced.pusheendailykt.main.model.TopNewsItemsBean
 import okhttp3.*
@@ -99,25 +100,21 @@ class Presenter : IPresenter {
     }
 
     override fun getBannerItems() {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url("https://news-at.zhihu.com/api/3/news/latest")
-            .get()
-            .build()
-        val call = client.newCall(request)
-        call.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("网络请求", "Banner请求失败")
+        loadBannerItems { refreshState ->
+            when (refreshState) {
+                is RefreshState.Success -> {
+                    topNewsItems = mutableListOf()
+                    topNewsItems!!.addAll(NewsPreference.topNewsItems)
+//                     topNewsItems!!.addAll(topNewsItemsTemp)
+                }
+                is RefreshState.Failure -> {
+                    if (topNewsItems!!.isNotEmpty()) {
+                        val topNewsItems = mutableListOf<TopNewsItemsBean.TopStoriesBean>()
+                        topNewsItems.addAll(NewsPreference.topNewsItems)
+                    }
+                }
             }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                val gson = Gson()
-                val topNewsItemsBean = gson
-                    .fromJson(response.body!!.string(), TopNewsItemsBean::class.java)
-                topNewsItems = topNewsItemsBean.top_stories?.toMutableList()
-            }
-        })
+        }
     }
 
     override fun getBothItems() {

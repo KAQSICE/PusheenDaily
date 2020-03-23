@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.orhanobut.hawk.Hawk
 import com.tranced.pusheendailykt.R
 import com.tranced.pusheendailykt.main.presenter.Presenter
 import kotlinx.coroutines.GlobalScope
@@ -49,9 +50,11 @@ class MainActivity : AppCompatActivity(), IView {
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override fun initNewsList() = runBlocking {
+    override fun initNewsList(): RecyclerView = runBlocking {
+        Hawk.init(baseContext).build()
+        newsList = findViewById(R.id.news_list)
         val job1 = GlobalScope.launch {
-            getBothItems()
+            presenter.getBothItems()
             while (true) {
                 if (!presenter.newsItems.isNullOrEmpty() && !presenter.topNewsItems.isNullOrEmpty()) {
                     break
@@ -64,27 +67,30 @@ class MainActivity : AppCompatActivity(), IView {
             presenter.newsItems,
             presenter.topNewsItems
         )
-        newsList = findViewById(R.id.news_list)
-        newsList.layoutManager = LinearLayoutManager(applicationContext)
-        newsList.adapter = newsListAdapter
-        newsList.addOnScrollListener(object : OnLoadingListener() {
-            override fun onLoading() {
-                runBlocking {
-                    val formerSize = presenter.newsItems?.size
-                    val job2 = GlobalScope.launch {
-                        getNewsItems()
-                        while (true) {
-                            if (presenter.newsItems?.size!! > formerSize!! + 1) {
-                                break
+        newsList.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = newsListAdapter
+            addOnScrollListener(object : OnLoadingListener() {
+                override fun onLoading() {
+                    runBlocking {
+                        val formerSize = presenter.newsItems?.size
+                        val job2 = GlobalScope.launch {
+                            presenter.getNewsItems()
+                            while (true) {
+                                if (presenter.newsItems?.size!! > formerSize!! + 1) {
+                                    break
+                                }
                             }
                         }
+                        job2.join()
+                        newsListAdapter.apply {
+                            resetTimer()
+                            notifyDataSetChanged()
+                        }
                     }
-                    job2.join()
-                    newsListAdapter.resetTimer()
-                    newsListAdapter.notifyDataSetChanged()
                 }
-            }
-        })
+            })
+        }
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -92,9 +98,9 @@ class MainActivity : AppCompatActivity(), IView {
         swipeRefreshLayout = findViewById(R.id.refresh)
         swipeRefreshLayout.setOnRefreshListener {
             runBlocking {
-                resetData()
+                presenter.resetData()
                 val job3 = GlobalScope.launch {
-                    getBothItems()
+                    presenter.getBothItems()
                     while (true) {
                         if (!presenter.newsItems.isNullOrEmpty() && !presenter.topNewsItems.isNullOrEmpty()) {
                             break
@@ -113,18 +119,6 @@ class MainActivity : AppCompatActivity(), IView {
                 swipeRefreshLayout.isRefreshing = false
             }
         }
-    }
-
-    override fun getNewsItems() {
-        presenter.getNewsItems()
-    }
-
-    override fun getBothItems() {
-        presenter.getBothItems()
-    }
-
-    override fun resetData() {
-        presenter.resetData()
     }
 
     override fun getDay(): String {
